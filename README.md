@@ -17,7 +17,7 @@ The plugin includes `paoding` analyzer and `paoding` tokenizer.
 
 optional config `collector` can be set to `most_word` or `max_word_len`
 
-1.install the paoding analysis plugin and drop the config files into `config/paoding/`
+1.install the paoding analysis plugin and drop the config files(https://github.com/downloads/medcl/elasticsearch-analysis-paoding/config.zip) into `your_es_root/config/paoding/`
 
 2.create a index with paoding analysis config
 

@@ -45,7 +45,7 @@ public class PaodingTokenizerFactory extends AbstractTokenizerFactory {
 
     @Override
     public Tokenizer create(Reader reader) {
-      logger.info(paoding+","+collector);
+//      logger.info(paoding+","+collector);
       return new PaodingTokenizer(reader,paoding,collector);
     }
 }

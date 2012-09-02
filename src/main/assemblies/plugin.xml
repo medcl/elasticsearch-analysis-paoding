@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <assembly>
-    <id>plugin</id>
+    <id>paoding</id>
     <formats>
         <format>zip</format>
     </formats>
@@ -13,14 +13,6 @@
             <excludes>
                 <exclude>org.elasticsearch:elasticsearch</exclude>
             </excludes>
-        </dependencySet>
-        <dependencySet>
-            <outputDirectory>/</outputDirectory>
-            <useProjectArtifact>true</useProjectArtifact>
-            <useTransitiveFiltering>true</useTransitiveFiltering>
-            <!--<includes>-->
-                <!--<include>org.apache.lucene:lucene-pinyin</include>-->
-            <!--</includes>-->
-        </dependencySet>
+        </dependencySet>        
     </dependencySets>
 </assembly>
