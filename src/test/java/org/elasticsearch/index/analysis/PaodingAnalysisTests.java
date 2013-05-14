@@ -25,7 +25,7 @@ import net.paoding.analysis.analyzer.impl.MostWordsTokenCollector;
 import net.paoding.analysis.knife.Paoding;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
-import org.apache.lucene.analysis.tokenattributes.TermAttribute;
+import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.analysis.tokenattributes.TypeAttribute;
 import org.elasticsearch.common.inject.Injector;
 import org.elasticsearch.common.inject.ModulesBuilder;
@@ -51,6 +51,7 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 public class PaodingAnalysisTests {
 
 
+    @Test
     public void testPaodingAnalysis() {
         Index index = new Index("test");
         Injector parentInjector = new ModulesBuilder().add(new SettingsModule(EMPTY_SETTINGS), new EnvironmentModule(new Environment(EMPTY_SETTINGS))).createInjector();
@@ -59,13 +60,13 @@ public class PaodingAnalysisTests {
                 new IndexNameModule(index),
                 new AnalysisModule(EMPTY_SETTINGS, parentInjector.getInstance(IndicesAnalysisService.class)).addProcessor(new PaodingAnalysisBinderProcessor()))
                 .createChildInjector(parentInjector);
-
         AnalysisService analysisService = injector.getInstance(AnalysisService.class);
 
         TokenizerFactory tokenizerFactory = analysisService.tokenizer("paoding");
         MatcherAssert.assertThat(tokenizerFactory, instanceOf(PaodingTokenizerFactory.class));
 
     }
+
 
     @Test
     public void TestTokenizer() throws IOException {
@@ -83,9 +84,9 @@ public class PaodingAnalysisTests {
 
             while (hasnext) {
 
-                TermAttribute ta = tokenizer.getAttribute(TermAttribute.class);
+                CharTermAttribute ta = tokenizer.getAttribute(CharTermAttribute.class);
 
-                System.out.println(ta.term());
+                System.out.println(ta.toString());
 
                 hasnext = tokenizer.incrementToken();
 
@@ -110,12 +111,12 @@ public class PaodingAnalysisTests {
             try{
                 Reader r = new StringReader(param);
                 ts = ika.tokenStream("TestField", r);
-                TermAttribute termAtt = (TermAttribute) ts.getAttribute(TermAttribute.class);
+                CharTermAttribute termAtt = (CharTermAttribute) ts.getAttribute(CharTermAttribute.class);
                 TypeAttribute typeAtt = (TypeAttribute) ts.getAttribute(TypeAttribute.class);
                 String key = null;
                 while (ts.incrementToken()) {
                     if ("word".equals(typeAtt.type())) {
-                        key = termAtt.term();
+                        key = termAtt.toString();
                         if (key.length() >= 2) {
                             keys.add(key);
                         }

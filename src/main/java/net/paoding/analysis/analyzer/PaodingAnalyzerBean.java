@@ -48,7 +48,16 @@ public class PaodingAnalyzerBean extends Analyzer {
 	public PaodingAnalyzerBean() {
 	}
 
-	/**
+    @Override
+    protected TokenStreamComponents createComponents(String fieldName, Reader reader) {
+        if (knife == null) {
+            throw new NullPointerException("knife should be set before token");
+        }
+        // PaodingTokenizer是TokenStream实现，使用knife解析reader流入的文本
+        return new TokenStreamComponents(new PaodingTokenizer(reader, knife, createTokenCollector()));
+    }
+
+    /**
 	 * @see #setKnife(Knife)
 	 * @param knife
 	 */
@@ -142,16 +151,6 @@ public class PaodingAnalyzerBean extends Analyzer {
 		}
 	}
 
-	// -------------------------------------------------
-
-	@Override
-    public final TokenStream tokenStream(String fieldName, Reader reader) {
-		if (knife == null) {
-			throw new NullPointerException("knife should be set before token");
-		}
-		// PaodingTokenizer是TokenStream实现，使用knife解析reader流入的文本
-		return new PaodingTokenizer(reader, knife, createTokenCollector());
-	}
 
 	protected TokenCollector createTokenCollector() {
 		if (modeClass != null) {

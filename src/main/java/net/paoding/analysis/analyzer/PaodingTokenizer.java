@@ -28,7 +28,7 @@ import net.paoding.analysis.knife.Paoding;
 import org.apache.lucene.analysis.Token;
 import org.apache.lucene.analysis.Tokenizer;
 import org.apache.lucene.analysis.tokenattributes.OffsetAttribute;
-import org.apache.lucene.analysis.tokenattributes.TermAttribute;
+import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.analysis.tokenattributes.TypeAttribute;
 
 /**
@@ -109,7 +109,7 @@ public final class PaodingTokenizer extends Tokenizer implements Collector {
 	 */
 	private Iterator<Token> tokenIteractor;
 
-	private TermAttribute termAtt;
+	private CharTermAttribute termAtt;
 	private OffsetAttribute offsetAtt;
 	private TypeAttribute typeAtt;
 
@@ -123,14 +123,15 @@ public final class PaodingTokenizer extends Tokenizer implements Collector {
 	 */
 	public PaodingTokenizer(Reader input, Knife knife,
 			TokenCollector tokenCollector) {
-		this.input = input;
+        super(input);
+        this.input = input;
 		this.knife = knife;
 		this.tokenCollector = tokenCollector;
 		init();
 	}
 
 	private void init() {
-		termAtt = addAttribute(TermAttribute.class);
+		termAtt = addAttribute(CharTermAttribute.class);
 		offsetAtt = addAttribute(OffsetAttribute.class);
 		typeAtt = addAttribute(TypeAttribute.class);
 	}
@@ -194,7 +195,7 @@ public final class PaodingTokenizer extends Tokenizer implements Collector {
 		}
 		// 返回tokensIteractor下一个Token对象
 		Token token = tokenIteractor.next();
-		termAtt.setTermBuffer(token.term());
+		termAtt.append(token.toString());
 		offsetAtt.setOffset(correctOffset(token.startOffset()),
 				correctOffset(token.endOffset()));
 		typeAtt.setType("paoding");
@@ -208,9 +209,9 @@ public final class PaodingTokenizer extends Tokenizer implements Collector {
 		inputLength = 0;
 	}
 	
-	@Override
+
 	public void reset(Reader input) throws IOException {
-		super.reset(input);
+		super.reset();
 		reset();
 	}
 }

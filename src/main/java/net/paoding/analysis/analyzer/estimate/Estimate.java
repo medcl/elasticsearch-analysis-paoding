@@ -1,16 +1,15 @@
 package net.paoding.analysis.analyzer.estimate;
 
+import net.paoding.analysis.analyzer.PaodingTokenizer;
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
+
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.LinkedList;
-
-import net.paoding.analysis.analyzer.PaodingTokenizer;
-
-import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.TokenStream;
-import org.apache.lucene.analysis.tokenattributes.TermAttribute;
 
 public class Estimate {
 	private Analyzer analyzer;
@@ -70,11 +69,11 @@ public class Estimate {
 			//collect token
 			TokenStream ts = analyzer.tokenStream("", reader);
 			ts.reset();
-			TermAttribute termAtt = (TermAttribute) ts
-					.addAttribute(TermAttribute.class);
+			CharTermAttribute termAtt = (CharTermAttribute) ts
+					.addAttribute(CharTermAttribute.class);
 			while (ts.incrementToken()) {
 				if (printGate != null && printGate.filter(wordsCount)) {
-					list.add(new CToken(termAtt.term(), wordsCount));
+					list.add(new CToken(termAtt.toString(), wordsCount));
 				}
 				wordsCount++;
 			}
